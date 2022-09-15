@@ -30,21 +30,34 @@ class User(db.Model, UserMixin):
             'token': self.apitoken
         }
 
+class Diet(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    height = db.Column(db.Integer, nullable=False, unique=True)
+    weight = db.Column(db.Integer, nullable=False, unique=True)
+    age = db.Column(db.Integer, nullable=False, unique=True)
+    gender = db.Column(db.String(50), nullable=False, unique=True)
+    calories = db.Column(db.Integer, nullable=False, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
 
-# class USE FOR PROFILE(db.Model):
-#     goal = db.Column(db.String(50), nullable=False, unique=True)
-#     gender = db.Column(db.String(50), nullable=False, unique=True)
-#     age = db.Column(db.Integer, nullable=False, unique=True)
-#     activity = db.Column(db.String(50), nullable=False, unique=True)
-#     bmi = db.Column(db.Integer, nullable=False, unique=True)
+    def __init__(self, height, weight, age, gender, calories, user_id):
+        self.height = height
+        self.weight = weight
+        self.age = age
+        self.gender = gender
+        self.calories = calories
+        self.user_id = user_id
 
-#     def __init__(self,)
+    def save(self):
+        db.session.add(self)
+        db.session.commit()
 
-
-#     self.goal = goal
-#         self.gender = gender
-#         self.age = age
-#         self.activity = activity
-#         self.bmi = bmi
-#         self.apitoken = token_hex(16)
+    def __init__(self, height, weight, age, gender, calories, user_id):
+        return {
+        'height': self.height, 
+        'weight': self.weight,
+        'age': self.age,
+        'gender': self.gender, 
+        'calories':self.calories, 
+        'user_id': self.user_id 
+    }

@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.security import check_password_hash
 
 # import models
-from app.models import User
+from app.models import User, Diet
 
 auth = Blueprint('auth', __name__, template_folder='authtemplates')
 
@@ -67,4 +67,25 @@ def apiLogMeIn():
     return {
         'status': 'not ok',
         'message': 'Invalid username.'
+    }
+
+@auth.route('/api/editprofile', methods=["POST"])
+def apiEditProfile(user):
+    data = request.json
+     
+    height = data['username']
+    weight = data['email']
+    age = data['password']
+    gender = data['gender']
+    calories = data['cal']
+
+    # add user to database
+    diet = Diet(height, weight, age, gender, calories, user.id)
+
+    # add instance to our db
+    db.session.add(diet)
+    db.session.commit()
+    return {
+        'status': 'ok',
+        'message': "Successfully created diet"
     }
